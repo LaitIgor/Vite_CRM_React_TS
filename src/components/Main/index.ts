@@ -1,2 +1,2 @@
-import {MainContent} from './mainContent'
-export default MainContent;
+import {Dashboard} from './dashboard'
+export default Dashboard;
