@@ -22,7 +22,7 @@ function App() {
         element={<Dashboard/>}
       />
       <Route
-        path="/project"
+        path="/product"
         element={<Project/>}
       />
       <Route

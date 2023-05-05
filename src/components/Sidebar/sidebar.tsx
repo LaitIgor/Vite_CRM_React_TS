@@ -1,33 +1,28 @@
-import {NavLink} from 'react-router-dom';
+import {Link} from 'react-router-dom';
+import Box from '@mui/material/Box';
+
+import Links from './Links';
 
 import styles from './sidebar.module.css'
+
 import logo from '../../assets/Logo.png'
-
-// type NavLinkStatus = {
-//     isPending: boolean;
-// }
-
-const navigationList = ['dashboard', 'project', 'customers', 'income', 'promote', 'help'];
 
 export const Sidebar = () => {
     return (
-        <div className={styles.sidebarMain}>
-            <div className="logo">
-                <img src={logo} alt="Dashboard logo" />
-            </div>
-            <ul className="navigation">
-                {navigationList.map((string) => {
-                    const capitalized = string.charAt(0).toUpperCase() + string.slice(1);
-                    return <li className={styles["list-itemsss"]}>
-                    <NavLink
-                    to={`/${string === 'dashboard' ? '' : string}`}
-                    className='pending'
-                    >
-                        {capitalized}
-                    </NavLink>
-                </li>
-                })}
-            </ul>
-        </div>
+        <Box
+            sx={{
+                boxSizing: 'border-box',
+                width: '306px',
+                height: '100vh',
+                bgcolor: 'white',
+                padding: '28px',
+                paddingTop: '36px'
+            }}
+        >
+            <Link to='/' className={styles.logo}>
+                <img src={logo} alt="Dashboard logo" /> <span className={styles.logoVersion}>v0.1</span>
+            </Link>
+                <Links />             
+            </Box>
         )
 }
