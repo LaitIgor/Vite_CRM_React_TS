@@ -7,6 +7,7 @@ import Customers from './components/Customers';
 import Income from './components/Income';
 import Promote from './components/Promote';
 import Help from './components/Help';
+import Authentication from './components/authentication';
 import './App.css'
 
 function App() {
@@ -40,6 +41,10 @@ function App() {
       <Route
         path="/help"
         element={<Help/>}
+      />
+      <Route
+        path="/auth"
+        element={<Authentication/>}
       />
       <Route
         path="/*"
