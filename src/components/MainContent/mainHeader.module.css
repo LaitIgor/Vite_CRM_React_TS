@@ -1,0 +1,27 @@
+.mainHeader-wrapper {
+    width: 100%;
+    text-align: left;
+}
+
+.header__wrapper {
+    text-align: left;
+    border-bottom: 2px solid #f4f1f1;
+    margin-bottom: 14px;
+}
+
+.header__title {
+    margin: 0;
+    margin-bottom: 16px;
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 36px;
+    color: #2B3844;
+}
+
+.header__subtitle {
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 14px;
+    color: #2B3844;
+    opacity: 0.7;
+}

@@ -22,7 +22,7 @@ export const Sidebar = () => {
                 backgroundColor: '#fbfbff',
             }}
         >
-            // TODO: fix component names collision
+           {/* TODO: fix component names collision */}
             <Link to='/' className={styles.logo}>
                 <img src={logo} alt="Dashboard logo" /> <span className={styles.logoVersion}>v0.1</span>
             </Link>

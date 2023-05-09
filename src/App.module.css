@@ -1,4 +1,4 @@
-#root {
+/* #root {
   width: 100%;
   margin: 0 auto;
   text-align: center;
@@ -6,4 +6,10 @@
   display: flex;
   justify-content: start;
   min-height: 100vh;
+} */
+
+.mainWrapper {
+  background-color: #F8F8F8;
+  display: flex;
+  flex-grow: 1;
 }

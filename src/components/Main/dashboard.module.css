@@ -1,0 +1,17 @@
+.dashboard {
+    
+    /* background-color: #ffffff; */
+    color: #000000;
+}
+
+.header__title {
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 36px;
+    line-height: 36px;
+    color: #2B3844;
+}
+
+.header__title, .header__subtitle {
+    color: #000000;
+}

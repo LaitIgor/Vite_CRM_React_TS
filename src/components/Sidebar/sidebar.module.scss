@@ -1,0 +1,80 @@
+.logo {
+    display: flex;
+    margin-bottom: 53px; 
+    align-items: end;
+}
+
+.logoVersion {
+    margin-left: 4px;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 15px;
+    color: #838383;
+    transform: translateY(-5px)
+}
+
+.linkActive {
+    background-color: #5932EA;
+    color: #ffffff;
+    &:hover {
+        color: #ffffff;
+    }
+}
+
+.listContainer {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.linkWrapper {
+    padding: 14px;
+    display: flex;
+    background-color: inherit;
+    border-radius: 8px;
+    color: inherit;
+    font-size: 14px;
+    line-height: 21px;
+    font-weight: 500;
+
+    & .linkIcon {
+        margin-right: 14px;
+    }
+
+    & .chevron {
+        margin-left: auto;
+        align-self: center;
+    }
+}
+
+.logout {
+    all: unset;
+    cursor: pointer;
+    position: absolute;
+    bottom: 4rem;
+    left: 0;
+    display: flex;
+    background-color: transparent;
+    width: auto;
+    left: 28px;
+    align-items: center;
+    &:hover {
+        outline: none
+    }
+    &::before {
+        content: '';
+        position: absolute;
+        top: -40px;
+        display: block;
+        width: 250px;
+        height: 1px;
+        background-color: #c4c4c4;
+
+    }
+    & :first-child {
+        margin-right: 10px;
+    }
+    & :nth-child(2) {
+        color: black;
+    }
+}
