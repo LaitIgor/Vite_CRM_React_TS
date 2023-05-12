@@ -1,15 +1,20 @@
-import {Routes, Route, Navigate} from 'react-router-dom';
-
+import {Routes, Route, Navigate, Link, useNavigate} from 'react-router-dom';
+import Button from '@mui/material/Button';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Main';
 import Project from './components/Project';
 import Customers from './components/Customers';
 import Income from './components/Income';
 import Authentication from './components/authentication';
+import CreateAccount from './components/create-account';
 import styles from './App.module.css'
 
 function App() {
   // const [loggedIn, setLoggedIn] = useState(false);
+  const location = useNavigate();
+
+  console.log(location, 'location');
+  
 
   let loggedIn;
 
@@ -22,6 +27,12 @@ function App() {
   return (
     <>
     {/* {loggedIn && <Navigate to='auth'/>} */}
+    <Button 
+      sx={{position: 'absolute', top: 0, left: 0, zIndex: 10}}
+      onClick={() => location(-1)}
+    >
+      Go to start
+    </Button>
     <main className={styles.mainWrapper}>
 
     <Routes>
@@ -45,6 +56,10 @@ function App() {
       <Route
         path="/auth"
         element={<Authentication/>}
+      />
+      <Route
+        path="/create-account"
+        element={<CreateAccount/>}
       />
       <Route
         path="/*"
