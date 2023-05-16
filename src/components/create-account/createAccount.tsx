@@ -1,12 +1,18 @@
 import {useForm, FieldValues} from 'react-hook-form';
 import {Container, Box, TextField, Button} from '@mui/material';
+import {useNavigate} from 'react-router-dom';
+
+import { ExtendedUser } from '../../types/types';
 
 export const CreateAccount = () => {
-    const {register, handleSubmit, formState: {errors}, watch} = useForm();
-    
+    const {register, handleSubmit, formState: {errors}} = useForm();
+    const navigate = useNavigate();
+
+
     const onSubmit = (data: FieldValues) => {
-        console.log(data, 'Form data');
-        
+        const userCreateAndLoggedIn: ExtendedUser = {...data, loggedIn: true}
+        localStorage.setItem('userData', JSON.stringify(userCreateAndLoggedIn))
+        navigate("/");
     }
     
     return (
@@ -41,6 +47,7 @@ export const CreateAccount = () => {
                         helperText={errors.companyName ? 'This field is required' : null}
                     />
                     <TextField 
+                        type='email'
                         label='Email'
                         fullWidth
                         margin='normal'

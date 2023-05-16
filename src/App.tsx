@@ -1,6 +1,5 @@
-import {Routes, Route, Navigate, Link, useNavigate} from 'react-router-dom';
+import {Routes, Route, Navigate, useLocation, useNavigate} from 'react-router-dom';
 import Button from '@mui/material/Button';
-import Sidebar from './components/Sidebar';
 import Dashboard from './components/Main';
 import Project from './components/Project';
 import Customers from './components/Customers';
@@ -10,26 +9,19 @@ import CreateAccount from './components/create-account';
 import styles from './App.module.css'
 
 function App() {
-  // const [loggedIn, setLoggedIn] = useState(false);
-  const location = useNavigate();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  console.log(location, 'location');
-  
-
-  let loggedIn;
-
-    if (Math.random() > 0.7) {
-      console.log('User is not logged in');
-      loggedIn = true;
-    }
-      
+  const userLoggedIn = JSON.parse(localStorage.getItem('userData') ?? '');
+  const shouldRedirect = !userLoggedIn.loggedIn && location.pathname !== '/create-account';
 
   return (
     <>
-    {/* {loggedIn && <Navigate to='auth'/>} */}
+    {shouldRedirect && <Navigate to='/auth'/>}
+
     <Button 
       sx={{position: 'absolute', top: 0, left: 0, zIndex: 10}}
-      onClick={() => location(-1)}
+      onClick={() => navigate(-1)}
     >
       Go to start
     </Button>

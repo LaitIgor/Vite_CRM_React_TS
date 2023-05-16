@@ -1,3 +1,5 @@
+
+
 import {Link} from 'react-router-dom';
 import Box from '@mui/material/Box';
 
@@ -8,7 +10,16 @@ import styles from './sidebar.module.scss'
 import logo from '../../assets/Logo.png'
 import logout from '../../assets/logout-arrow.svg';
 
+import { ExtendedUser } from '../../types/types';
+
 export const Sidebar = () => {
+
+    const logOut = () => {
+        const currentUser: ExtendedUser  = JSON.parse(localStorage.getItem('userData')!);
+        currentUser.loggedIn = false;
+        localStorage.setItem('userData', JSON.stringify(currentUser));
+    }
+
     return (
         <Box
             sx={{
@@ -16,9 +27,11 @@ export const Sidebar = () => {
                 position: 'relative',
                 width: '306px',
                 height: '100vh',
-                bgcolor: 'white',
                 padding: '28px',
                 paddingTop: '36px',
+                display: 'flex',
+                flexDirection: 'column',
+                bgcolor: 'white',
                 backgroundColor: '#fbfbff',
             }}
         >
@@ -32,7 +45,7 @@ export const Sidebar = () => {
             <Link 
             to='/auth'
             className={styles.logout}
-            onClick={(e) => console.log(e, 'eee')}
+            onClick={logOut}
             >
                 <img src={logout} alt="Log out" />
                 <span>Log out</span>

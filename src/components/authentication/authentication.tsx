@@ -1,21 +1,28 @@
 import FormControl from '@mui/base/FormControl';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import Input, { InputProps } from '@mui/base/Input';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 
-import { useForm } from 'react-hook-form';
+import { useForm, FieldValues } from 'react-hook-form';
 
 import styles from './authentication.module.scss';
 
+import { ExtendedUser } from '../../types/types';
+
 export const Authentication = () => {
-    const {register, handleSubmit, watch, formState, formState: {errors}} = useForm();
-    const onSubmit = (data: any) => console.log(data, 'dataaa');
-
-    console.log(watch('example'), 'wex');
-    console.log(formState, 'formState');
+    const {register, handleSubmit, formState: {errors}} = useForm();
+    const navigate = useNavigate();
     
+    const onSubmit = (data: FieldValues) => {
+        const currentUser: ExtendedUser = JSON.parse(localStorage.getItem('userData') ?? '')
 
+        if (currentUser && currentUser.email === data.email && currentUser.password === data.password) {
+            currentUser.loggedIn = true;
+            localStorage.setItem('userData', JSON.stringify(currentUser));
+            navigate('/');
+        }
+
+    };
 
     return (
         <div className={styles.container}>
@@ -24,7 +31,7 @@ export const Authentication = () => {
             <FormControl className={styles['form-group']}>
                 <TextField 
                     sx={{marginBottom: '24px'}}
-                    label='outlined'
+                    label='email'
                     {...register('email', {required: true})} 
                 />
                 {errors.email && <span>Email is required!</span>}
