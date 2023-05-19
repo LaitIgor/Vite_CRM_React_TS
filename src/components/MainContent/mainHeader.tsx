@@ -13,7 +13,7 @@ type MainHeaderProps = {
 }
 // TODO: css classes fix
 export const MainHeader = ({headerTitle, headerSubtitle}: MainHeaderProps) => {
-    const {modalIsOpen, setModalIsOpen} = useContext(Context);
+    const {setModalIsOpen} = useContext(Context);
 
     return (
         <div className={styles['header__wrapper']}>
