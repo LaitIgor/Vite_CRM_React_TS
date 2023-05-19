@@ -4,6 +4,8 @@
 }
 
 .header__wrapper {
+    display: flex;
+    justify-content: space-between;
     text-align: left;
     border-bottom: 2px solid #f4f1f1;
     margin-bottom: 14px;

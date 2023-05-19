@@ -1,3 +1,4 @@
+import {useState} from 'react';
 import {Routes, Route, Navigate, useLocation, useNavigate} from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Dashboard from './components/Main';
@@ -6,9 +7,15 @@ import Customers from './components/Customers';
 import PersonalCabinet from './components/PersonalCabinet';
 import Authentication from './components/authentication';
 import CreateAccount from './components/Create-account';
+import CreateProductModal from './components/CreateProductModal';
+
+import Context from './store/context';
+
 import styles from './App.module.css'
 
 function App() {
+const [modalIsOpen, setModalIsOpen] = useState(false)
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -27,38 +34,42 @@ function App() {
     </Button>
     <main className={styles.mainWrapper}>
 
-    <Routes>
-      //Add error handling
-      <Route
-        path="/"
-        element={<Dashboard/>}
-      />
-      <Route
-        path="/product"
-        element={<Project/>}
-      />
-      <Route
-        path="/sales"
-        element={<Customers/>}
-      />
-      <Route
-        path="/personal-cabinet"
-        element={<PersonalCabinet/>}
-      />
-      <Route
-        path="/auth"
-        element={<Authentication/>}
-      />
-      <Route
-        path="/create-account"
-        element={<CreateAccount/>}
-      />
-      <Route
-        path="/*"
-        element={<div>No component matched!</div>}
-      />
+    <Context.Provider value={{modalIsOpen, setModalIsOpen}}>
+      <Routes>
+        //Add error handling
+        <Route
+          path="/"
+          element={<Dashboard/>}
+        />
+        <Route
+          path="/product"
+          element={<Project/>}
+        />
+        <Route
+          path="/sales"
+          element={<Customers/>}
+        />
+        <Route
+          path="/personal-cabinet"
+          element={<PersonalCabinet/>}
+        />
+        <Route
+          path="/auth"
+          element={<Authentication/>}
+        />
+        <Route
+          path="/create-account"
+          element={<CreateAccount/>}
+        />
+        <Route
+          path="/*"
+          element={<div>No component matched!</div>}
+        />
 
-    </Routes>
+      </Routes>
+
+      <CreateProductModal />
+    </Context.Provider>
 
     </main>
     </>
