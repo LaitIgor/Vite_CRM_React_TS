@@ -1,8 +1,5 @@
-import Sidebar from '../Sidebar';
 import MainHeader from '../MainContent';
 import MainPageWrapper from '../mainpageWrapper';
-
-import Box from '@mui/material/Box'
 
 import styles from './dashboard.module.css';
 

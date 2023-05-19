@@ -3,17 +3,17 @@ import Button from '@mui/material/Button';
 import Dashboard from './components/Main';
 import Project from './components/Project';
 import Customers from './components/Customers';
-import Income from './components/Income';
+import PersonalCabinet from './components/PersonalCabinet';
 import Authentication from './components/authentication';
-import CreateAccount from './components/create-account';
+import CreateAccount from './components/Create-account';
 import styles from './App.module.css'
 
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const userLoggedIn = JSON.parse(localStorage.getItem('userData') ?? '');
-  const shouldRedirect = !userLoggedIn.loggedIn && location.pathname !== '/create-account';
+  const userLoggedIn = localStorage.getItem('userData') && JSON.parse(localStorage.getItem('userData') ?? '') ;
+  const shouldRedirect = userLoggedIn && !userLoggedIn.loggedIn && location.pathname !== '/create-account';
 
   return (
     <>
@@ -43,7 +43,7 @@ function App() {
       />
       <Route
         path="/personal-cabinet"
-        element={<Income/>}
+        element={<PersonalCabinet/>}
       />
       <Route
         path="/auth"

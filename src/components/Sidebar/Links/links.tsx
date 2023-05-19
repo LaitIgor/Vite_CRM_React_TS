@@ -28,7 +28,7 @@ export const Links = () => {
     return <ul className={styles.listContainer}>
     {navigationList.map((link) => {
         return (
-            <li>
+            <li key={link.title}>
                 <NavLink
                 to={`/${link.route === 'main-page' ? '' : link.route}`}
                 className={({ isActive}) => isActive ? styles.linkActive :  ""}

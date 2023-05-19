@@ -18,8 +18,8 @@ export const CreateAccount = () => {
     return (
         <>
         <Container maxWidth='sm'>
-            <Box display='flex' alignItems='center' height='100vh'>
-                <form onSubmit={handleSubmit(onSubmit)}>
+            <Box display='flex' alignItems='center'>
+                <form style={{width: '100%'}} onSubmit={handleSubmit(onSubmit)}>
                     <Box display='flex' gap={2}>
                         <TextField 
                             label='First name'
@@ -67,9 +67,9 @@ export const CreateAccount = () => {
                         label='Repeat password'
                         fullWidth
                         margin='normal'
-                        {...register('repeatPpassword', {required: true})}
-                        error={!!errors.repeatPpassword}
-                        helperText={errors.repeatPpassword ? 'This field is required' : null}
+                        {...register('repeatPassword', {required: true})}
+                        error={!!errors.repeatPassword}
+                        helperText={errors.repeatPassword ? 'This field is required' : null}
                     />
                     <Button sx={{padding: '16px'}} fullWidth variant='contained' color='primary' type='submit'>Create account</Button>
                 </form>

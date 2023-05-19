@@ -1,2 +1,2 @@
-import { CreateAccount } from "./createAccount";
+import { CreateAccount } from './createAccount';
 export default CreateAccount;
