@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Context from '../../store/context';
 
-import {useForm, FieldValues, FieldError, DeepMap} from 'react-hook-form';
+import {useForm, useController, FieldValues, FieldError, DeepMap, Controller} from 'react-hook-form';
 
 import styles from './createProductModal.module.scss';
 
@@ -45,19 +45,38 @@ const style = {
     return errorMessageString[errorType];
   }
 
+
+
 export const CreateProductModal = () => {
     const {modalIsOpen, setModalIsOpen} = useContext(Context);
-    const { register, handleSubmit, watch, formState: { errors } } = useForm<FormValues>();
+    const { register, handleSubmit, watch, control, formState: { errors }, reset, formState } = useForm<FormValues>({
+        defaultValues: {
+            store: '',
+            productName: '',
+            productcategory: '',
+            price: '',
+            goodsQuantity: '',
+            weightVolume: ''
+        }
+    });
 
-    const {}
+    // console.warn(formState, 'formStateformStateformState');
+    
+
+    const {field} = useController({name: 'price', control});
 
     const [storeValue, setStoreValue] = useState('222222');
 
-    const submitProduct = (data: FieldValues) => console.log(data, 'product values');
+    const submitProduct = (data: FieldValues) => {
+        console.log(data, 'product values')
+        setTimeout(() => {
 
-    console.log(errors, 'errors obj');
-    
-    
+            reset()
+            console.warn('RESETTING');
+            
+        }, 1000 * 1.5)
+    };
+
     
     // min?: string | number;
     // max?: string | number;
@@ -68,63 +87,130 @@ export const CreateProductModal = () => {
     // disabled?: boolean;
 
     const  replaceNonNumericSymbols = (value: string) => {
-        const newValue = value.replace(/^[0-9\b]+$/, '');
-        console.log(newValue, 'newValuenewValuenewValue');
-        
-        return setStoreValue(newValue)
+        const newValue = value.replace(/\D/g, '');
+        field.onChange(newValue)
     }
 
-    
+
     return (
-        <Modal open={modalIsOpen} onClose={() => setModalIsOpen((prev) => !prev)}>
+        <Modal open={modalIsOpen} onClose={() => {setModalIsOpen((prev) => !prev); reset()}}>
             <Box sx={style}>
                 <Typography className={styles['modal-title']} component='h3' variant='h3'>Creating a product</Typography>
                 <form onSubmit={handleSubmit(submitProduct)} style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
-                    <TextField 
-                        label='Store'
-                        fullWidth
-                        {...register('store', {required: true, minLength: 3, min: 1})}
-                        error={!!errors.store}
-                        helperText={errors.store ? errorMessageHandler(errors.store.type, 3) : ''}
+                    <Controller 
+                        name='store'
+                        control={control}
+                        rules={{required: 'This field is required'}}
+                        render={({field}) => (
+                            <TextField 
+                                {...field}
+                                label='Store'
+                                fullWidth
+                                error={!!errors.store}
+                                helperText={errors.store ? errors.store.message : ''}
+                                // {...register('store', {required: true, minLength: 3, min: 1, pattern: {value: /\D/g, message: 'should not be letters'}}, )}
+                                // helperText={errors.store ? errorMessageHandler(errors.store.type, 3) : ''}
+                            />
+                        )}
                     />
-                    <TextField 
-                        type='number'
+                    <Controller 
+                        name='price'
+                        control={control}
+                        rules={{required: true}}
+                        render={({field}) => (
+                            <TextField 
+                                {...field}
+                                label='Price'
+                                fullWidth
+                                error={!!errors.price}
+                                helperText={errors.price ? errorMessageHandler(errors.price.type) : ''}
+                                onChange={(event) => {
+                                    const value = event.target.value;
+                                    event.target.value = value.replace(/^[^.0-9]|(\.(?=.*\.))|[^\d.]/g, '');
+                                    field.onChange(event) 
+                                }}
+                            />
+                        )}
+                    />
+                    {/* <TextField 
                         label='Price'
-                        value={storeValue}
+                        value={field.value}
                         fullWidth
-                        // {...register('price', {required: true})}
+                        {...register('price', {required: true})}
                         onChange={(event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => replaceNonNumericSymbols(event.target.value)}
                         error={!!errors.price}
                         helperText={errors.price ? errorMessageHandler(errors.price.type) : ''}
+                    /> */}
+                    <Controller 
+                        name='productName'
+                        control={control}
+                        rules={{required: true}}
+                        render={({field}) => (
+                            <TextField 
+                                {...field}
+                                label='Product name'
+                                fullWidth
+                                // {...register('productName', {required: true})}
+                                error={!!errors.productName}
+                                helperText={errors.productName ? errorMessageHandler(errors.productName.type) : ''}
+                            />
+                        )}
                     />
-                    <TextField 
-                        label='Product name'
-                        fullWidth
-                        {...register('productName', {required: true})}
-                        error={!!errors.productName}
-                        helperText={errors.price ? errorMessageHandler(errors.price.type) : ''}
+                    <Controller 
+                        name='productcategory'
+                        control={control}
+                        rules={{required: true}}
+                        render={({field}) => (
+                            <TextField 
+                                {...field}
+                                label='Product category'
+                                fullWidth
+                                // {...register('productcategory', {required: true})}
+                                error={!!errors.productcategory}
+                                helperText={errors.productcategory ? errorMessageHandler(errors.productcategory.type) : ''}
+                            />
+                        )}
                     />
-                    <TextField 
-                        label='Product category'
-                        fullWidth
-                        {...register('productcategory', {required: true})}
-                        error={!!errors.productcategory}
-                        helperText={errors.price ? errorMessageHandler(errors.price.type) : ''}
+                    <Controller
+                        name='goodsQuantity'
+                        control={control}
+                        rules={{required: true}}
+                        render={({field}) => (
+                            <TextField 
+                                {...field}
+                                label='Quantity of goods'
+                                fullWidth
+                                error={!!errors.goodsQuantity}
+                                helperText={errors.goodsQuantity ? errorMessageHandler(errors.goodsQuantity.type) : ''}
+                                onChange={(event) => {
+                                    const value = event.target.value;
+                                    event.target.value = value.replace(/\D/g, '');
+                                    field.onChange(event)
+                                }}
+                            />
+                        )}
+
                     />
-                    <TextField 
-                        label='Quantity of goods'
-                        fullWidth
-                        {...register('goodsQuantity', {required: true})}
-                        error={!!errors.goodsQuantity}
-                        helperText={errors.price ? errorMessageHandler(errors.price.type) : ''}
+                    <Controller
+                        name='weightVolume'
+                        control={control}
+                        rules={{required: true}}
+                        render={({field}) => (
+                            <TextField 
+                                {...field}
+                                label='Weight/volume of one item'
+                                fullWidth
+                                error={!!errors.weightVolume}
+                                helperText={errors.weightVolume ? errorMessageHandler(errors.weightVolume.type) : ''}
+                                onChange={(event) => {
+                                    const value = event.target.value;
+                                    event.target.value = value.replace(/^[^.0-9]|(\.(?=.*\.))|[^\d.]/g, '');
+                                    field.onChange(event)
+                                }}
+                            />
+                        )}
                     />
-                    <TextField 
-                        label='Weight/volume of one item'
-                        fullWidth
-                        {...register('weightVolume', {required: true})}
-                        error={!!errors.weightVolume}
-                        helperText={errors.price ? errorMessageHandler(errors.price.type) : ''}
-                    />
+                       
                     <Button sx={{p: '16px 32px'}} variant='contained' type='submit'>Add product</Button>
                 </form>
             </Box>
