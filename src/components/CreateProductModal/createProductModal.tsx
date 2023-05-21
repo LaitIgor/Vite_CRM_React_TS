@@ -22,7 +22,7 @@ const style = {
     p: 4,
   };
 
-  type FormValues = {
+  export type FormValues = {
     store: string;
     price: string;
     productName: string;
@@ -30,6 +30,7 @@ const style = {
     goodsQuantity: string;
     weightVolume: string;
     id?: string;
+    creationDate?: string;
   }
 
   type FormErrors = DeepMap<FormValues, FieldError>
@@ -61,9 +62,6 @@ export const CreateProductModal = () => {
         }
     });
 
-    // console.warn(formState, 'formStateformStateformState');
-    
-
     const {field} = useController({name: 'price', control});
 
     const [storeValue, setStoreValue] = useState('222222');
@@ -78,17 +76,16 @@ export const CreateProductModal = () => {
     }
 
     const submitProduct = (data: FieldValues) => {
-        const newProduct = {...data, id: crypto.randomUUID()} as FormValues
-        console.log(data, 'product values')
-        console.log(newProduct, 'newProduct values')
+        const creationDate = new Intl.DateTimeFormat('en-GB').format(new Date())
+        const newProduct = {...data, id: crypto.randomUUID(), creationDate} as FormValues
+        // console.log(data, 'product values')
+        // console.log(newProduct, 'newProduct values')
         
         setTimeout(() => {
             addProdToList(newProduct)
-
             reset()
-            console.warn('RESETTING');
             
-        }, 1000 * 1.5)
+        }, 1000)
     };
 
     

@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {Routes, Route, Navigate, useLocation, useNavigate} from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Dashboard from './components/Main';
-import Project from './components/Project';
+import MyProducts from './components/MyProducts';
 import Customers from './components/Customers';
 import PersonalCabinet from './components/PersonalCabinet';
 import Authentication from './components/authentication';
@@ -43,7 +43,7 @@ const [modalIsOpen, setModalIsOpen] = useState(false)
         />
         <Route
           path="/product"
-          element={<Project/>}
+          element={<MyProducts/>}
         />
         <Route
           path="/sales"
