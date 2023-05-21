@@ -29,6 +29,7 @@ const style = {
     productcategory: string;
     goodsQuantity: string;
     weightVolume: string;
+    id?: string;
   }
 
   type FormErrors = DeepMap<FormValues, FieldError>
@@ -67,9 +68,22 @@ export const CreateProductModal = () => {
 
     const [storeValue, setStoreValue] = useState('222222');
 
+    const addProdToList = (product: FormValues) => {
+        const existingProductsinJSON = localStorage.getItem('existingProducts');
+        const existingProducts = existingProductsinJSON ? JSON.parse(existingProductsinJSON) : [];
+        existingProducts.push(product);
+        console.log(existingProducts, 'existingProducts to push to loc storage');
+        localStorage.setItem('existingProducts', JSON.stringify(existingProducts));
+        
+    }
+
     const submitProduct = (data: FieldValues) => {
+        const newProduct = {...data, id: crypto.randomUUID()} as FormValues
         console.log(data, 'product values')
+        console.log(newProduct, 'newProduct values')
+        
         setTimeout(() => {
+            addProdToList(newProduct)
 
             reset()
             console.warn('RESETTING');
