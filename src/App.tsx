@@ -3,7 +3,7 @@ import {Routes, Route, Navigate, useLocation, useNavigate} from 'react-router-do
 import Button from '@mui/material/Button';
 import Dashboard from './components/Main';
 import MyProducts from './components/MyProducts';
-import Customers from './components/Customers';
+import MySales from './components/Sales';
 import PersonalCabinet from './components/PersonalCabinet';
 import Authentication from './components/authentication';
 import CreateAccount from './components/Create-account';
@@ -13,14 +13,24 @@ import Context from './store/context';
 
 import styles from './App.module.css'
 
+import {FormValues} from './components/CreateProductModal/createProductModal';
+
 function App() {
 const [modalIsOpen, setModalIsOpen] = useState(false)
+const [isProductEditMode, setIsProductEditMode] = useState<FormValues | null>(null);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const userLoggedIn = localStorage.getItem('userData') && JSON.parse(localStorage.getItem('userData') ?? '') ;
   const shouldRedirect = userLoggedIn && !userLoggedIn.loggedIn && location.pathname !== '/create-account';
+
+const contex = {
+  modalIsOpen, 
+  setModalIsOpen,
+  isProductEditMode, 
+  setIsProductEditMode
+}
 
   return (
     <>
@@ -34,7 +44,7 @@ const [modalIsOpen, setModalIsOpen] = useState(false)
     </Button>
     <main className={styles.mainWrapper}>
 
-    <Context.Provider value={{modalIsOpen, setModalIsOpen}}>
+    <Context.Provider value={{...contex}}>
       <Routes>
         //Add error handling
         <Route
@@ -47,7 +57,7 @@ const [modalIsOpen, setModalIsOpen] = useState(false)
         />
         <Route
           path="/sales"
-          element={<Customers/>}
+          element={<MySales/>}
         />
         <Route
           path="/personal-cabinet"

@@ -50,7 +50,7 @@ const style = {
 
 
 export const CreateProductModal = () => {
-    const {modalIsOpen, setModalIsOpen} = useContext(Context);
+    const {modalIsOpen, setModalIsOpen, isProductEditMode, setIsProductEditMode} = useContext(Context);
     const { register, handleSubmit, watch, control, formState: { errors }, reset, formState } = useForm<FormValues>({
         defaultValues: {
             store: '',
@@ -64,8 +64,6 @@ export const CreateProductModal = () => {
 
     const {field} = useController({name: 'price', control});
 
-    const [storeValue, setStoreValue] = useState('222222');
-
     const addProdToList = (product: FormValues) => {
         const existingProductsinJSON = localStorage.getItem('existingProducts');
         const existingProducts = existingProductsinJSON ? JSON.parse(existingProductsinJSON) : [];
@@ -78,8 +76,6 @@ export const CreateProductModal = () => {
     const submitProduct = (data: FieldValues) => {
         const creationDate = new Intl.DateTimeFormat('en-GB').format(new Date())
         const newProduct = {...data, id: crypto.randomUUID(), creationDate} as FormValues
-        // console.log(data, 'product values')
-        // console.log(newProduct, 'newProduct values')
         
         setTimeout(() => {
             addProdToList(newProduct)
@@ -102,11 +98,23 @@ export const CreateProductModal = () => {
         field.onChange(newValue)
     }
 
+    console.log(modalIsOpen, 'modalIsOpen');
+    console.log(isProductEditMode, 'isProductEditMode');
+    
+
+    const closeModal = () => {
+        setModalIsOpen(false)
+        setIsProductEditMode(() => null)
+        reset()
+    }
+
+    const edit = !!isProductEditMode ? true : false;
+
 
     return (
-        <Modal open={modalIsOpen} onClose={() => {setModalIsOpen((prev) => !prev); reset()}}>
+        <Modal open={modalIsOpen || !!isProductEditMode} onClose={closeModal}>
             <Box sx={style}>
-                <Typography className={styles['modal-title']} component='h3' variant='h3'>Creating a product</Typography>
+                <Typography className={styles['modal-title']} component='h3' variant='h3'>{edit ? 'Editing a product' : 'Creating a product'}</Typography>
                 <form onSubmit={handleSubmit(submitProduct)} style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
                     <Controller 
                         name='store'
@@ -222,7 +230,7 @@ export const CreateProductModal = () => {
                         )}
                     />
                        
-                    <Button sx={{p: '16px 32px'}} variant='contained' type='submit'>Add product</Button>
+                    <Button sx={{p: '16px 32px'}} variant='contained' type='submit'>{edit ? 'Save changes' : 'Add product'}</Button>
                 </form>
             </Box>
         </Modal>
