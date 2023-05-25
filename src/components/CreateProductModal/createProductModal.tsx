@@ -1,4 +1,4 @@
-import {useState, useContext} from 'react';
+import {useState, useContext, useEffect} from 'react';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -47,22 +47,29 @@ const style = {
     return errorMessageString[errorType];
   }
 
+  let defaultFormValues = {
+    store: '',
+    productName: '',
+    productcategory: '',
+    price: '',
+    goodsQuantity: '',
+    weightVolume: ''
+}
 
 
 export const CreateProductModal = () => {
-    const {modalIsOpen, setModalIsOpen, isProductEditMode, setIsProductEditMode} = useContext(Context);
-    const { register, handleSubmit, watch, control, formState: { errors }, reset, formState } = useForm<FormValues>({
-        defaultValues: {
-            store: '',
-            productName: '',
-            productcategory: '',
-            price: '',
-            goodsQuantity: '',
-            weightVolume: ''
-        }
-    });
+    const {setModalIsOpen, isProductEditMode, setIsProductEditMode, setSuccessMessage} = useContext(Context);
+    const edit = !!isProductEditMode;
 
-    const {field} = useController({name: 'price', control});
+    let defaultValues = defaultFormValues; 
+
+    if (edit) {
+        defaultValues = isProductEditMode!; 
+    }
+
+    const { register, handleSubmit, watch, control, formState: { errors }, reset, formState } = useForm<FormValues>({defaultValues});
+
+    // const {field} = useController({name: 'price', control});
 
     const addProdToList = (product: FormValues) => {
         const existingProductsinJSON = localStorage.getItem('existingProducts');
@@ -70,19 +77,26 @@ export const CreateProductModal = () => {
         existingProducts.push(product);
         console.log(existingProducts, 'existingProducts to push to loc storage');
         localStorage.setItem('existingProducts', JSON.stringify(existingProducts));
-        
     }
 
     const submitProduct = (data: FieldValues) => {
         const creationDate = new Intl.DateTimeFormat('en-GB').format(new Date())
         const newProduct = {...data, id: crypto.randomUUID(), creationDate} as FormValues
         
-        setTimeout(() => {
-            addProdToList(newProduct)
-            reset()
-            
-        }, 1000)
+        addProdToList(newProduct)
+        closeModal('created');
     };
+
+    const submitEditProduct = (data: FieldValues) => {
+        const existingProducts = JSON.parse(localStorage.getItem('existingProducts')!) as FormValues[];
+        const editedProductArray = existingProducts.map((product) => {
+            if (product.id === data.id) return data
+            return product
+        })
+        console.log(editedProductArray, 'editedProductArray');
+        localStorage.setItem('existingProducts', JSON.stringify(editedProductArray));
+        closeModal('edited');
+    }
 
     
     // min?: string | number;
@@ -93,44 +107,50 @@ export const CreateProductModal = () => {
     // required?: boolean;
     // disabled?: boolean;
 
-    const  replaceNonNumericSymbols = (value: string) => {
-        const newValue = value.replace(/\D/g, '');
-        field.onChange(newValue)
-    }
+    // const  replaceNonNumericSymbols = (value: string) => {
+    //     const newValue = value.replace(/\D/g, '');
+    //     field.onChange(newValue)
+    // }
 
-    console.log(modalIsOpen, 'modalIsOpen');
-    console.log(isProductEditMode, 'isProductEditMode');
+    // // console.log(isProductEditMode, 'isProductEditMode');
     
 
-    const closeModal = () => {
+    const closeModal = (message: 'deleted' | 'edited' | 'sold' | 'created' | '') => {
         setModalIsOpen(false)
         setIsProductEditMode(() => null)
-        reset()
+        reset();
+        setSuccessMessage(message);
     }
 
-    const edit = !!isProductEditMode ? true : false;
-
-
     return (
-        <Modal open={modalIsOpen || !!isProductEditMode} onClose={closeModal}>
+        <Modal open={true} onClose={closeModal}>
             <Box sx={style}>
                 <Typography className={styles['modal-title']} component='h3' variant='h3'>{edit ? 'Editing a product' : 'Creating a product'}</Typography>
-                <form onSubmit={handleSubmit(submitProduct)} style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
+                <form 
+                    onSubmit={handleSubmit(edit ? submitEditProduct : submitProduct)} 
+                    style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}
+                >
                     <Controller 
                         name='store'
                         control={control}
                         rules={{required: 'This field is required'}}
-                        render={({field}) => (
-                            <TextField 
+                        render={({field}) => {
+                            console.log(field, 'fieldfieldfield');
+                            
+                           return <TextField 
                                 {...field}
                                 label='Store'
                                 fullWidth
                                 error={!!errors.store}
                                 helperText={errors.store ? errors.store.message : ''}
-                                // {...register('store', {required: true, minLength: 3, min: 1, pattern: {value: /\D/g, message: 'should not be letters'}}, )}
-                                // helperText={errors.store ? errorMessageHandler(errors.store.type, 3) : ''}
+                                // defaultValue={field.value}
+                                // onChange={(event) => {
+                                //     const value = event.target.value;
+                                //     event.target.value = value.replace(/^[^.0-9]|(\.(?=.*\.))|[^\d.]/g, '');
+                                //     field.onChange(event);
+                                //   }}
                             />
-                        )}
+                        }}
                     />
                     <Controller 
                         name='price'
@@ -230,7 +250,12 @@ export const CreateProductModal = () => {
                         )}
                     />
                        
-                    <Button sx={{p: '16px 32px'}} variant='contained' type='submit'>{edit ? 'Save changes' : 'Add product'}</Button>
+                    <Button 
+                        sx={{p: '16px 32px'}} 
+                        variant='contained' 
+                        type='submit'>
+                        {edit ? 'Save changes' : 'Add product'}
+                    </Button>
                 </form>
             </Box>
         </Modal>

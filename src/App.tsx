@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import React, {useState} from 'react';
 import {Routes, Route, Navigate, useLocation, useNavigate} from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Dashboard from './components/Main';
@@ -8,16 +8,21 @@ import PersonalCabinet from './components/PersonalCabinet';
 import Authentication from './components/authentication';
 import CreateAccount from './components/Create-account';
 import CreateProductModal from './components/CreateProductModal';
+import Snackbar, {SnackbarCloseReason} from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import Transition, {SlideProps} from '@mui/material/Slide';
 
 import Context from './store/context';
 
 import styles from './App.module.css'
 
 import {FormValues} from './components/CreateProductModal/createProductModal';
+import {SuccessMessage} from './store/context';
 
 function App() {
-const [modalIsOpen, setModalIsOpen] = useState(false)
-const [isProductEditMode, setIsProductEditMode] = useState<FormValues | null>(null);
+  const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [isProductEditMode, setIsProductEditMode] = useState<FormValues | null>(null);
+  const [successMessage, setSuccessMessage] = useState<SuccessMessage>('')
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -29,8 +34,17 @@ const contex = {
   modalIsOpen, 
   setModalIsOpen,
   isProductEditMode, 
-  setIsProductEditMode
+  setIsProductEditMode,
+  successMessage,
+  setSuccessMessage
 }
+
+const handleClose = ( event: React.SyntheticEvent<any> | Event, reason?: SnackbarCloseReason) => {
+  if (reason === 'clickaway') {
+    return;
+  }
+  setSuccessMessage('');
+};
 
   return (
     <>
@@ -78,9 +92,19 @@ const contex = {
 
       </Routes>
 
-      <CreateProductModal />
+      {(modalIsOpen || isProductEditMode) && <CreateProductModal />}
     </Context.Provider>
 
+      <Snackbar
+        open={!!successMessage}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+        autoHideDuration={3000}
+      >
+        <Alert onClose={handleClose} severity="success" sx={{ backgroundColor: 'green', color: 'wite', width: '100%' }}>
+          Product has been {successMessage} successfully
+        </Alert>
+      </Snackbar>
     </main>
     </>
   )
