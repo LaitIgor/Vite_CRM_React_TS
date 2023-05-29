@@ -43,8 +43,11 @@ const handleClose = ( event: React.SyntheticEvent<any> | Event, reason?: Snackba
   if (reason === 'clickaway') {
     return;
   }
-  setSuccessMessage('');
+  setSuccessMessage(() => '');
 };
+
+console.log(modalIsOpen || isProductEditMode, 'modalIsOpen || isProductEditMode');
+
 
   return (
     <>
@@ -111,3 +114,7 @@ const handleClose = ( event: React.SyntheticEvent<any> | Event, reason?: Snackba
 }
 
 export default App
+
+
+
+

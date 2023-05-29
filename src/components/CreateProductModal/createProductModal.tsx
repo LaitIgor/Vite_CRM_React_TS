@@ -58,7 +58,7 @@ const style = {
 
 
 export const CreateProductModal = () => {
-    const {setModalIsOpen, isProductEditMode, setIsProductEditMode, setSuccessMessage} = useContext(Context);
+    const {modalIsOpen, setModalIsOpen, isProductEditMode, setIsProductEditMode, setSuccessMessage} = useContext(Context);
     const edit = !!isProductEditMode;
 
     let defaultValues = defaultFormValues; 
@@ -123,7 +123,7 @@ export const CreateProductModal = () => {
     }
 
     return (
-        <Modal open={true} onClose={closeModal}>
+        <Modal open={modalIsOpen || !!isProductEditMode} onClose={() => closeModal('')}>
             <Box sx={style}>
                 <Typography className={styles['modal-title']} component='h3' variant='h3'>{edit ? 'Editing a product' : 'Creating a product'}</Typography>
                 <form 

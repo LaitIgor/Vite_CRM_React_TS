@@ -16,7 +16,7 @@ import Box from '@mui/material/Box';
 
 import {FormValues} from '../CreateProductModal/createProductModal'
 
-type ProductsWithSaleDate = FormValues & {saleDate: string};
+export type ProductsWithSaleDate = FormValues & {saleDate: string};
 
 type ProductsType = Required<FormValues>[] | Required<ProductsWithSaleDate>
 
