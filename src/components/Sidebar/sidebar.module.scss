@@ -13,14 +13,6 @@
     transform: translateY(-5px)
 }
 
-.linkActive {
-    background-color: #5932EA;
-    color: #ffffff;
-    &:hover {
-        color: #ffffff;
-    }
-}
-
 .listContainer {
     margin: 0;
     padding: 0;
@@ -36,14 +28,53 @@
     font-size: 14px;
     line-height: 21px;
     font-weight: 500;
+    transition: background-color .1s ease;
+
+    &:hover {
+        background-color: #f4f4f4;
+
+        & .linkIcon {
+            transform: scale(1.2);
+        }
+
+        & .chevron {
+            animation: backAndFor 1s linear  infinite ;
+        }
+    }
+
 
     & .linkIcon {
+        transform: scale(1);
         margin-right: 14px;
+        transition: transform .3s ease;
     }
 
     & .chevron {
         margin-left: auto;
         align-self: center;
+    }
+}
+
+@keyframes backAndFor {
+    0% {transform: translatex(0px);}
+    50% {transform: translatex(7px);}
+    100% {transform: translatex(0px);}
+}
+  
+
+.linkActive {
+    background-color: #5932EA;
+    color: #ffffff;
+    &:hover {
+        color: #ffffff;
+
+        & .linkWrapper {
+            background-color: #5932EA;
+        }
+
+        & .linkIcon {
+            transform: scale(1)
+        }
     }
 }
 

@@ -1,8 +1,8 @@
 import {useForm, FieldValues} from 'react-hook-form';
 import {TextField, Button} from '@mui/material';
 
-import MainPageWrapper from "../mainpageWrapper";
-import MainHeader from "../MainContent";
+import MainPageWrapper from "../../MainpageWrapper";
+import MainHeader from "../../MainContentHeader";
 
 import {Box, Container} from '@mui/material';
 

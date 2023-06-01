@@ -1,16 +1,18 @@
 import React, {useState} from 'react';
 import {Routes, Route, Navigate, useLocation, useNavigate} from 'react-router-dom';
 import Button from '@mui/material/Button';
-import Dashboard from './components/Main';
-import MyProducts from './components/MyProducts';
-import MySales from './components/Sales';
-import PersonalCabinet from './components/PersonalCabinet';
-import Authentication from './components/authentication';
-import CreateAccount from './components/Create-account';
+import Dashboard from './components/Pages/Dashboard';
+import MyProducts from './components/Pages/MyProducts';
+import MySales from './components/Pages/Sales';
+import PersonalCabinet from './components/Pages/PersonalCabinet';
+import Authentication from './components/Pages/Authentication';
+import CreateAccount from './components/Pages/CreateAccount';
 import CreateProductModal from './components/CreateProductModal';
 import Snackbar, {SnackbarCloseReason} from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Transition, {SlideProps} from '@mui/material/Slide';
+
+import { getLocalStorage } from './utils/uniqueMethods';
 
 import Context from './store/context';
 
@@ -27,7 +29,7 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const userLoggedIn = localStorage.getItem('userData') && JSON.parse(localStorage.getItem('userData') ?? '') ;
+  const userLoggedIn = getLocalStorage('userData') && JSON.parse(localStorage.getItem('userData') ?? '') ;
   const shouldRedirect = userLoggedIn && !userLoggedIn.loggedIn && location.pathname !== '/create-account';
 
 const contex = {
@@ -45,9 +47,6 @@ const handleClose = ( event: React.SyntheticEvent<any> | Event, reason?: Snackba
   }
   setSuccessMessage(() => '');
 };
-
-console.log(modalIsOpen || isProductEditMode, 'modalIsOpen || isProductEditMode');
-
 
   return (
     <>
@@ -97,14 +96,13 @@ console.log(modalIsOpen || isProductEditMode, 'modalIsOpen || isProductEditMode'
 
       {(modalIsOpen || isProductEditMode) && <CreateProductModal />}
     </Context.Provider>
-
       <Snackbar
         open={!!successMessage}
         onClose={handleClose}
         TransitionComponent={Transition}
         autoHideDuration={3000}
       >
-        <Alert onClose={handleClose} severity="success" sx={{ backgroundColor: 'green', color: 'wite', width: '100%' }}>
+        <Alert onClose={handleClose} severity="info">
           Product has been {successMessage} successfully
         </Alert>
       </Snackbar>

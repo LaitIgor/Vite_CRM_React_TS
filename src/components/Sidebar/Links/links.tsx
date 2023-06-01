@@ -4,12 +4,8 @@ import chevronRight from '../../../assets/chevronRight.png';
 
 import square3dL from '../../../assets/3dsquareL.png';
 import square3d from '../../../assets/3dsquare.png';
-import discountShapeL from '../../..//assets/discountShapeL.png';
-import discountShape from '../../../assets/discountShape.png';
 import keySquareL from '../../../assets/keySquareL.png';
 import keySquare from '../../../assets/keySquare.png';
-import messageQuestionL from '../../../assets/messageQuestionL.png';
-import messageQuestion from '../../../assets/messageQuestion.png';
 import userSquareL from '../../../assets/userSquareL.png';
 import userSquare from '../../../assets/userSquare.png';
 import walletMoneyL from '../../../assets/walletMoneyL.png';

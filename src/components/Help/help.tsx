@@ -1,1 +1,0 @@
-export const Help = () => <div>Help</div>

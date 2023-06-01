@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 
-import MainPageWrapper from "../mainpageWrapper";
-import MainHeader from "../MainContent";
+import MainPageWrapper from "../../MainpageWrapper";
+import MainHeader from "../../MainContentHeader";
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,25 +10,21 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
 
 import Box from '@mui/material/Box';
 
-import {FormValues} from '../CreateProductModal/createProductModal'
+import { getLocalStorage } from '../../../utils/uniqueMethods';
+
+import { FormValues } from '../../CreateProductModal/createProductModal'
 
 export type ProductsWithSaleDate = FormValues & {saleDate: string};
-
-type ProductsType = Required<FormValues>[] | Required<ProductsWithSaleDate>
 
 export const MySales = () => {
     const [products, setProducts] = useState<ProductsWithSaleDate[]>([]);
 
     useEffect(() => {
-        const existinigProducts = localStorage.getItem('soldProducts');
-        if (existinigProducts) {
-            const parsedProducts = JSON.parse(existinigProducts);
-            setProducts(parsedProducts)
-        }
+        const existinigProducts = getLocalStorage('soldProducts');
+        setProducts(existinigProducts)
     }, [])
 
     return (

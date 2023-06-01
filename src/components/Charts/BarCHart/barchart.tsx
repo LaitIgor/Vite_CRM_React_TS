@@ -10,7 +10,8 @@ import {
 } from '@devexpress/dx-react-chart-material-ui';
 import { Animation } from '@devexpress/dx-react-chart';
 
-import {ProductsWithSaleDate} from '../../Sales/sales';
+import {ProductsWithSaleDate} from '../../Pages/Sales/sales';
+import { getLocalStorage } from '../../../utils/uniqueMethods';
 
 type WeekDaysProp = 'Mon' | 'Tue' | 'Wed' | 'Thu' | 'Fri' | 'Sat' | 'Sun';
 type ChartDataProps = {weekDay: WeekDaysProp, totalAmountSold: number }
@@ -30,10 +31,8 @@ export const BarChart = () => {
     const [chartValues, setChartValues] = useState<ChartDataProps[]>([]);
 
     useEffect(() => {
-        const soldItemsJson = localStorage.getItem('soldProducts');
-        const soldItemsParsed: ProductsWithSaleDate[] = soldItemsJson ? JSON.parse(soldItemsJson) : [];
+        const soldItemsParsed = getLocalStorage('soldProducts') as ProductsWithSaleDate[];
         setSoldItems(soldItemsParsed)
-
     }, []);
 
     useEffect(() => {
@@ -51,9 +50,6 @@ export const BarChart = () => {
     
         setChartValues(chartData)
     }, [soldItems]);
-
-    console.log(chartData, 'chartData');
-    
 
     return (
         <Paper>

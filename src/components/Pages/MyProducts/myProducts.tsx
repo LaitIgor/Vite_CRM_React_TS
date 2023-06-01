@@ -1,8 +1,8 @@
 import {useState, useEffect, useContext} from 'react';
-import Context from '../../store/context';
+import Context from '../../../store/context';
 
-import MainPageWrapper from "../mainpageWrapper";
-import MainHeader from "../MainContent";
+import MainPageWrapper from "../../MainpageWrapper";
+import MainHeader from "../../MainContentHeader";
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,35 +15,35 @@ import Button from '@mui/material/Button';
 
 import Box from '@mui/material/Box';
 
-import {FormValues} from '../CreateProductModal/createProductModal'
+import { getLocalStorage, setLocalStorage } from '../../../utils/uniqueMethods';
+import {FormValues} from '../../CreateProductModal/createProductModal'
+import { ProductsWithSaleDate } from '../Sales/sales';
 
 export const MyProducts = () => {
     const [products, setProducts] = useState<Required<FormValues>[]>([]);
     const {modalIsOpen, setIsProductEditMode, isProductEditMode, setSuccessMessage} = useContext(Context)
 
     useEffect(() => {
-        const existinigProducts = localStorage.getItem('existingProducts');
-        if (existinigProducts) {
-            const parsedProducts = JSON.parse(existinigProducts);
-            setProducts(parsedProducts)
-        }
+        const existinigProducts = getLocalStorage('existingProducts');
+        setProducts(existinigProducts)
+        
     }, [modalIsOpen, isProductEditMode])
 
     const sellProduct = (row: Required<FormValues>) => {
-        const soldProductsJSON = localStorage.getItem('soldProducts');
-        const parsedSoldProducts = soldProductsJSON ? JSON.parse(soldProductsJSON) : [];
+        const soldProducts = getLocalStorage('existingProducts') as Required<ProductsWithSaleDate>[];
         const saleDate = new Intl.DateTimeFormat('en-GB').format(new Date())
-        parsedSoldProducts.push({...row, saleDate})
-        localStorage.setItem('soldProducts', JSON.stringify(parsedSoldProducts));
+        soldProducts.push({...row, saleDate})
+        setLocalStorage<Required<ProductsWithSaleDate>[]>('soldProducts', soldProducts);
 
         deleteProduct(row.id)
         setSuccessMessage('sold')
     }
 
     const deleteProduct = (productId: string) => {
-        const existingProducts = JSON.parse(localStorage.getItem('existingProducts')!) as Required<FormValues>[];
+        const existingProducts = getLocalStorage('existingProducts') as Required<FormValues>[];
         const filteredProducts = existingProducts.filter((product) => product.id !== productId)
-        localStorage.setItem('existingProducts', JSON.stringify(filteredProducts));
+        setLocalStorage('existingProducts', filteredProducts);
+
         setProducts(filteredProducts)
         setSuccessMessage('deleted')
     }

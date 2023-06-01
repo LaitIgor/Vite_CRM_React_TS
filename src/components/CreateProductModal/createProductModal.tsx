@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import Context from '../../store/context';
 
 import {useForm, useController, FieldValues, FieldError, DeepMap, Controller} from 'react-hook-form';
-
+import { getLocalStorage, setLocalStorage } from '../../utils/uniqueMethods';
 import styles from './createProductModal.module.scss';
 
 const style = {
@@ -33,7 +33,7 @@ const style = {
     creationDate?: string;
   }
 
-  type FormErrors = DeepMap<FormValues, FieldError>
+//   type FormErrors = DeepMap<FormValues, FieldError>
 
 
 
@@ -72,11 +72,11 @@ export const CreateProductModal = () => {
     // const {field} = useController({name: 'price', control});
 
     const addProdToList = (product: FormValues) => {
-        const existingProductsinJSON = localStorage.getItem('existingProducts');
-        const existingProducts = existingProductsinJSON ? JSON.parse(existingProductsinJSON) : [];
+        const existingProducts: FormValues[]  = getLocalStorage('existingProducts') ;
         existingProducts.push(product);
-        console.log(existingProducts, 'existingProducts to push to loc storage');
-        localStorage.setItem('existingProducts', JSON.stringify(existingProducts));
+        console.log(existingProducts, 'what i set to LS');
+        
+        setLocalStorage('existingProducts', existingProducts);
     }
 
     const submitProduct = (data: FieldValues) => {
@@ -84,36 +84,20 @@ export const CreateProductModal = () => {
         const newProduct = {...data, id: crypto.randomUUID(), creationDate} as FormValues
         
         addProdToList(newProduct)
+
         closeModal('created');
     };
 
     const submitEditProduct = (data: FieldValues) => {
-        const existingProducts = JSON.parse(localStorage.getItem('existingProducts')!) as FormValues[];
+        const existingProducts = getLocalStorage('existingProducts') as FormValues[];
         const editedProductArray = existingProducts.map((product) => {
             if (product.id === data.id) return data
             return product
         })
-        console.log(editedProductArray, 'editedProductArray');
-        localStorage.setItem('existingProducts', JSON.stringify(editedProductArray));
+        
+        setLocalStorage('existingProducts', editedProductArray);
         closeModal('edited');
     }
-
-    
-    // min?: string | number;
-    // max?: string | number;
-    // maxLength?: number;
-    // minLength?: number;
-    // pattern?: string;
-    // required?: boolean;
-    // disabled?: boolean;
-
-    // const  replaceNonNumericSymbols = (value: string) => {
-    //     const newValue = value.replace(/\D/g, '');
-    //     field.onChange(newValue)
-    // }
-
-    // // console.log(isProductEditMode, 'isProductEditMode');
-    
 
     const closeModal = (message: 'deleted' | 'edited' | 'sold' | 'created' | '') => {
         setModalIsOpen(false)

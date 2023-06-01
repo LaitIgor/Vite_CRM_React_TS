@@ -7,7 +7,7 @@ import { useForm, FieldValues } from 'react-hook-form';
 
 import styles from './authentication.module.scss';
 
-import { ExtendedUser } from '../../types/types';
+import { ExtendedUser } from '../../../types/types';
 
 export const Authentication = () => {
     const {register, handleSubmit, formState: {errors}} = useForm();
