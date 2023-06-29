@@ -48,6 +48,7 @@ const handleClose = ( event: React.SyntheticEvent<any> | Event, reason?: Snackba
   setSuccessMessage(() => '');
 };
 
+
   return (
     <>
     {shouldRedirect && <Navigate to='/auth'/>}

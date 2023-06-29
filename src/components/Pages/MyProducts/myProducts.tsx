@@ -1,4 +1,4 @@
-import {useState, useEffect, useContext} from 'react';
+import {useState, useEffect, useLayoutEffect, useContext, useRef} from 'react';
 import Context from '../../../store/context';
 
 import MainPageWrapper from "../../MainpageWrapper";
@@ -18,6 +18,9 @@ import Box from '@mui/material/Box';
 import { getLocalStorage, setLocalStorage } from '../../../utils/uniqueMethods';
 import {FormValues} from '../../CreateProductModal/createProductModal'
 import { ProductsWithSaleDate } from '../Sales/sales';
+import { useIntersection } from '@mantine/hooks';
+
+import styles from './myProducts.module.scss'
 
 export const MyProducts = () => {
     const [products, setProducts] = useState<Required<FormValues>[]>([]);
@@ -39,6 +42,14 @@ export const MyProducts = () => {
         setSuccessMessage('sold')
     }
 
+    const animateAway = (productId: string) => {
+        const existingProducts = getLocalStorage('existingProducts') as Required<FormValues>[];
+        const filteredProducts = existingProducts.map((product) => product.id === productId ? {...product, isDeleting: true} : product)
+
+        setProducts(filteredProducts)
+        setTimeout(() => deleteProduct(productId), 0.125 * 1000)
+    }
+
     const deleteProduct = (productId: string) => {
         const existingProducts = getLocalStorage('existingProducts') as Required<FormValues>[];
         const filteredProducts = existingProducts.filter((product) => product.id !== productId)
@@ -48,6 +59,27 @@ export const MyProducts = () => {
         setSuccessMessage('deleted')
     }
 
+    // type Test = typeof TableRow;
+
+    // const lastRowRef = useRef<any>(null)
+    // const {ref, entry} = useIntersection({
+    //     root: lastRowRef.current,
+    //     threshold: 1,
+    // })
+
+    
+
+        // console.log(lastRowRef.current, 'lastRowRef.current');
+        
+    // useEffect(() => {
+    //     console.log(lastRowRef.current, 'USE EFFECT lastRowRef');
+        
+    // }, [lastRowRef.current])
+
+    // if (entry?.isIntersecting) {
+    //     console.log('Intersecting');
+    //     console.log(lastRowRef, 'lastRowRef');
+    // }
 
     return (
     <>
@@ -57,7 +89,7 @@ export const MyProducts = () => {
                 headerSubtitle='Product table'
             />
            <Box color='black'>
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} style={{overflow: 'hidden'}}>
                 <Table sx={{minWidth: 650}} stickyHeader>
                     <TableHead sx={{backgroundColor: 'black', color: 'white'}}>
                         <TableRow>
@@ -71,11 +103,15 @@ export const MyProducts = () => {
                             <TableCell sx={{backgroundColor: 'black', color: 'inherit'}}>Actions</TableCell>
                         </TableRow>
                     </TableHead>
-                    <TableBody>
-                        {products.map((row) => (
-                            <TableRow
-                            key={row.id}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                    <TableBody style={{transition: 'all 0.5s ease-out'}}>
+                        {products.map((row, i) => {
+                            // const conditionalRef = i === products.length - 1 ? {ref: lastRowRef} : {};
+                            return <TableRow
+                                key={row.id}
+                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }} 
+                                // {...conditionalRef}
+                                className={row.isDeleting ? `${styles.rowAnimates}` : ""}
+                            >
                                 <TableCell component='th' scope='row'>{row.productName}</TableCell>
                                 <TableCell >{row.store}</TableCell>
                                 <TableCell >{row.productcategory}</TableCell>
@@ -86,11 +122,11 @@ export const MyProducts = () => {
                                 <TableCell >
                                     <Button variant='outlined' onClick={() => sellProduct(row)}>Sell</Button>
                                     <Button variant='outlined' onClick={() => setIsProductEditMode(row)}>Edit</Button>
-                                    <Button variant='outlined' onClick={() => deleteProduct(row.id)}>X</Button>
+                                    <Button variant='outlined' onClick={() => animateAway(row.id)}>X</Button>
                                 </TableCell>
 
                         </TableRow>
-                        ))}
+                        })}
                     </TableBody>
                 </Table>
             </TableContainer>

@@ -4,6 +4,8 @@ import Box from '@mui/material/Box';
 import { PropsWithChildren } from "react";
 
 export const MainPageWrapper = ({children}: PropsWithChildren) => {
+    // console.log(children.length, 'children');
+    
     return (
         <>
             <Sidebar />

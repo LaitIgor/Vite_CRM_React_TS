@@ -31,6 +31,7 @@ const style = {
     weightVolume: string;
     id?: string;
     creationDate?: string;
+    isDeleting?: boolean;
   }
 
 //   type FormErrors = DeepMap<FormValues, FieldError>
